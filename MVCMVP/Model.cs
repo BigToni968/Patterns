@@ -5,24 +5,21 @@ namespace Patterns
 {
     public interface IModel
     {
-        public void OnInit(IModel model);
-        public IModel Copy();
-    }
-    public interface IModel<T> : IModel
-    {
-        public void Set(T data);
+        public void Init();
+        public T Copy<T>() where T : class;
+        public void Set(IModel model);
     }
 
     [Serializable]
-    public abstract class Model<T> : IModel
+    public abstract class Model : IModel
     {
-        [field: SerializeField] public T Data { get; private set; }
+        public virtual void Init() { }
 
-        public virtual void OnInit(IModel model) { }
-        public virtual void Set(T data) { }
-        public virtual IModel Copy()
+        public virtual void Set(IModel model) { }
+
+        public T Copy<T>() where T : class
         {
-            return MemberwiseClone() as IModel;
+            return MemberwiseClone() as T;
         }
     }
 }
